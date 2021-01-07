@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const path = require('path');
 
 const express = require('express');
@@ -65,10 +67,13 @@ app.use(authRoutes);
 
 app.use(errorController.get404);
 
+const PORT = process.env.PORT;
+const HOST = process.env.HOST
+
 mongoose
   .connect(MONGODB_URI)
   .then(result => {
-    app.listen(3005);
+    app.listen(PORT, HOST, function(){})
   })
   .catch(err => {
     console.log(err);
