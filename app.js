@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 
 const path = require('path');
 
@@ -73,7 +73,7 @@ const HOST = process.env.HOST
 mongoose
   .connect(MONGODB_URI)
   .then(result => {
-    app.listen(PORT, HOST, function(){})
+    app.listen(3005);
   })
   .catch(err => {
     console.log(err);

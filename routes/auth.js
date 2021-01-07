@@ -10,14 +10,27 @@ router.get('/login', authController.getLogin);
 
 router.get('/signup', authController.getSignup);
 
-router.post('/login', authController.postLogin);
+router.post(
+  '/login',
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Please enter a valid email address.')
+      .normalizeEmail(),
+    body('password', 'Password has to be valid.')
+      .isLength({ min: 4 })
+      .isAlpha()
+      .trim()
+  ],
+  authController.postLogin
+);
 
 router.post(
   '/signup',
   [
     check('email')
       .isEmail()
-      .withMessage('Please enter a valid email.'),
+      .withMessage('Please enter a valid email.')
     //   .custom((value, { req }) => {
     //     // if (value === 'test@test.com') {
     //     //   throw new Error('This email address if forbidden.');
@@ -30,19 +43,23 @@ router.post(
     //         );
     //       }
     //     });
-    //   }),
+    //   })
+      .normalizeEmail(),
     body(
       'password',
       'Please enter a password with only text and at least 4 characters.'
     )
       .isLength({ min: 4 })
-      .isAlpha(),
-    body('confirmPassword').custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error('Passwords have to match!');
-      }
-      return true;
-    })
+      .isAlpha()
+      .trim(),
+    body('confirmPassword')
+      .trim()
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error('Passwords have to match!');
+        }
+        return true;
+      })
   ],
   authController.postSignup
 );
