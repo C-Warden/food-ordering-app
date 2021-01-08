@@ -68,13 +68,25 @@ app.use(authRoutes);
 app.use(errorController.get404);
 
 const PORT = process.env.PORT;
-const HOST = process.env.HOST
+const HOST = process.env.HOST;
 
 mongoose
   .connect(MONGODB_URI)
   .then(result => {
-    app.listen(3005);
+    app.listen(PORT, HOST, function(){ 
+      console.log(`app listen on port ${PORT}`);
+    });
   })
   .catch(err => {
     console.log(err);
   });
+
+// mongoose
+//   .connect(MONGODB_URI)
+//   .then(result => {
+//     app.listen(3005);
+//   })
+//   .catch(err => {
+//     console.log(err);
+//   });
+
